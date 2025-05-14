@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>A simple clock</title>
+</head>
+
+
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		display: flex;
+		font-weight: bold;
+		font-variant-numeric: tabular-nums;
+	}
+
+	#output {
+		margin: 1rem;
+		display: inline-block;
+		font-size: 30px;
+		text-align: right;
+		color: white;
+		border-radius: 10px;
+		padding: 10px;
+		background-color: black;
+	}
+</style>
+
+<props />
+
+<body translate="no">
+	<div id="output" />
+
+	<script src='moment.js'></script>
+	<script>
+		function getFlexPositions(position) {
+			let flexPosition = {
+				alignItems: 'center',
+				justifyContent: 'center',
+			}
+
+			if (position.includes('top')) {
+				flexPosition.alignItems = 'flex-start'
+			} else if (position.includes('bottom')) {
+				flexPosition.alignItems = 'flex-end'
+			}
+
+			if (position.includes('left')) {
+				flexPosition.justifyContent = 'flex-start'
+			} else if (position.includes('right')) {
+				flexPosition.justifyContent = 'flex-end'
+			}
+			return flexPosition
+		}
+
+		var props = getComputedStyle(document.getElementsByTagName('props')[0]);
+		var urlParams = Object.fromEntries(new URLSearchParams(window.location.search));
+		var queryParams = Object.assign({}, props, urlParams);
+
+		function getProp(prop) {
+			var cssProp = props.getPropertyValue('--' + prop);
+			if (cssProp != '') return cssProp;
+			return urlParams[prop];
+		}
+
+		var body = document.body;
+		var output = document.getElementById("output");
+
+		function updateStyle() {
+			Object.assign(body.style, {
+				background: getProp('bg'),
+				...getFlexPositions(getProp('position') ?? "center"),
+			})
+			Object.assign(output.style, {
+				color: getProp('fg'),
+				fontFamily: getProp('font'),
+				fontSize: getProp('fontSize'),
+			})
+		}
+
+		function updateTime() {
+			output.innerText = moment().format(getProp('format') || 'YYYY-MM-DD HH:mm:ss');
+			requestAnimationFrame(updateTime);
+		}
+		requestAnimationFrame(updateTime);
+
+		// OBS's "Custom CSS" property takes a short time to load in.
+		setTimeout(updateStyle, 1);
+		setTimeout(updateStyle, 5);
+		setTimeout(updateStyle, 10);
+		setTimeout(updateStyle, 100);
+		updateTime();
+	</script>
+</body>
+
+</html>
