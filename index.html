@@ -2,10 +2,9 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<title>A simple clock</title>
+	<meta charset="UTF-8" />
+	<title>A Simple Clock</title>
 </head>
-
 
 <style>
 	body {
@@ -31,40 +30,42 @@
 	}
 </style>
 
+<!-- The `props` tag is solely for storing CSS properties (as per README.md). -->
+<!-- No elements are inserted inside this. -->
 <props />
 
 <body translate="no">
 	<div id="output" />
 
-	<script src='moment.js'></script>
+	<script src="moment.js"></script>
 	<script>
 		function getFlexPositions(position) {
 			let flexPosition = {
-				alignItems: 'center',
-				justifyContent: 'center',
+				alignItems: "center",
+				justifyContent: "center",
+			};
+
+			if (position.includes("top")) {
+				flexPosition.alignItems = "flex-start";
+			} else if (position.includes("bottom")) {
+				flexPosition.alignItems = "flex-end";
 			}
 
-			if (position.includes('top')) {
-				flexPosition.alignItems = 'flex-start'
-			} else if (position.includes('bottom')) {
-				flexPosition.alignItems = 'flex-end'
+			if (position.includes("left")) {
+				flexPosition.justifyContent = "flex-start";
+			} else if (position.includes("right")) {
+				flexPosition.justifyContent = "flex-end";
 			}
-
-			if (position.includes('left')) {
-				flexPosition.justifyContent = 'flex-start'
-			} else if (position.includes('right')) {
-				flexPosition.justifyContent = 'flex-end'
-			}
-			return flexPosition
+			return flexPosition;
 		}
 
-		var props = getComputedStyle(document.getElementsByTagName('props')[0]);
+		var props = getComputedStyle(document.getElementsByTagName("props")[0]);
 		var urlParams = Object.fromEntries(new URLSearchParams(window.location.search));
 		var queryParams = Object.assign({}, props, urlParams);
 
 		function getProp(prop) {
-			var cssProp = props.getPropertyValue('--' + prop);
-			if (cssProp != '') return cssProp;
+			var cssProp = props.getPropertyValue("--" + prop);
+			if (cssProp != "") return cssProp;
 			return urlParams[prop];
 		}
 
@@ -73,27 +74,28 @@
 
 		function updateStyle() {
 			Object.assign(body.style, {
-				background: getProp('bg'),
-				...getFlexPositions(getProp('position') ?? "center"),
-			})
+				background: getProp("bg"),
+				...getFlexPositions(getProp("position") ?? "center"),
+			});
 			Object.assign(output.style, {
-				color: getProp('fg'),
-				fontFamily: getProp('font'),
-				fontSize: getProp('fontSize'),
-			})
+				color: getProp("fg"),
+				fontFamily: getProp("font"),
+				fontSize: getProp("fontSize"),
+			});
 		}
 
-		function updateTime() {
-			output.innerText = moment().format(getProp('format') || 'YYYY-MM-DD HH:mm:ss');
-			requestAnimationFrame(updateTime);
-		}
-		requestAnimationFrame(updateTime);
-
-		// OBS's "Custom CSS" property takes a short time to load in.
+		// OBS's "Custom CSS" property takes an unpredictably short time to load in.
 		setTimeout(updateStyle, 1);
 		setTimeout(updateStyle, 5);
 		setTimeout(updateStyle, 10);
 		setTimeout(updateStyle, 100);
+		updateStyle();
+
+		function updateTime() {
+			output.innerText = moment().format(getProp("format") || "YYYY-MM-DD HH:mm:ss");
+			requestAnimationFrame(updateTime);
+		}
+		requestAnimationFrame(updateTime);
 		updateTime();
 	</script>
 </body>

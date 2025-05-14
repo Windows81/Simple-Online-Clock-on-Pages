@@ -2,7 +2,7 @@
 
 Simple customisable online clock (on GitHub Pages) which can be configured through query parameters. Optimised for the OBS Studio "browser" source type.
 
-Taken from https://obsproject.com/forum/resources/time-and-date-overlay-updated.1461/ with query params inspired by https://github.com/pablopunk/time?tab=readme-ov-file.
+Taken from [Chessset5's browser overlay](https://obsproject.com/forum/resources/time-and-date-overlay-updated.1461/) with query params inspired by [pablopunk/time](https://github.com/pablopunk/time?tab=readme-ov-file).
 
 - `fg`: Font colour
 - `bg`: Background colour
@@ -27,7 +27,7 @@ Parameters can be passed either in the query string:
 
 https://windows81.github.io/Simple-Online-Clock-on-Pages/?font=Inconsolata&fg=white&format=YYYY-MM-DD%20HH:mm:ss:SS
 
-Or as _Custom CSS_:
+Or as _Custom CSS_ in an instance of OBS Studio's _Browser_ source:
 
 ```css
 props {
@@ -36,3 +36,5 @@ props {
 --format: YYYY-MM-DD HH:mm:ss:SS;
 }
 ```
+
+The underlying HTML structure is the same as in [Chessset5's version](https://obsproject.com/forum/resources/time-and-date-overlay-updated.1461/). So any existing custom CSS should work as-is.
