@@ -19,14 +19,9 @@
 	}
 
 	#output {
-		margin: 1rem;
+		margin: 0;
 		display: inline-block;
-		font-size: 30px;
 		text-align: right;
-		color: white;
-		border-radius: 10px;
-		padding: 10px;
-		background-color: black;
 	}
 </style>
 
@@ -69,18 +64,34 @@
 			return urlParams[prop];
 		}
 
+		function fixFormat(format) {
+			switch (format) {
+				case "12":
+					return "h:mm:ss a";
+				case "24":
+					return "HH:mm:ss";
+				case undefined:
+					return "YYYY-MM-DD HH:mm:ss";
+				default:
+					return format;
+			}
+		}
+
 		var body = document.body;
 		var output = document.getElementById("output");
 
 		function updateStyle() {
 			Object.assign(body.style, {
-				background: getProp("bg"),
+				background: getProp("bg") ?? "black",
 				...getFlexPositions(getProp("position") ?? "center"),
 			});
 			Object.assign(output.style, {
-				color: getProp("fg"),
-				fontFamily: getProp("font"),
+				background: getProp("box") ?? "transparent",
+				color: getProp("fg") ?? "white",
+				fontFamily: getProp("font") ?? "sans-serif",
 				fontSize: getProp("fontSize"),
+				borderRadius: getProp("brad"),
+				padding: getProp("bpad"),
 			});
 		}
 
@@ -92,7 +103,8 @@
 		updateStyle();
 
 		function updateTime() {
-			output.innerText = moment().format(getProp("format") || "YYYY-MM-DD HH:mm:ss");
+			var format = fixFormat(getProp("format"));
+			output.innerText = moment().format(format);
 			requestAnimationFrame(updateTime);
 		}
 		requestAnimationFrame(updateTime);

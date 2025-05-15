@@ -4,14 +4,31 @@ Simple customisable online clock (on GitHub Pages) which can be configured throu
 
 Taken from [Chessset5's browser overlay](https://obsproject.com/forum/resources/time-and-date-overlay-updated.1461/) with query params inspired by [pablopunk/time](https://github.com/pablopunk/time?tab=readme-ov-file).
 
-- `fg`: Font colour
-- `bg`: Background colour
+- `fg`: Foreground colour
+
+  - defaults to `white`
+
+- `bg`: Page-wide background colour
+
+  - defaults to `black`
+
+- `box`: Text-box padding colour
+
+  - defaults to `transparent`
 
 - `font`: Font family
 
+  - defaults to `sans-serif`
+
 - `fontSize`: The size of the font in the clock
 
-- `position`: Position on the screen. Defaults to `center`
+- `position`: Position on the screen
+
+  - defaults to `center`
+
+- `bpad`: Text-box padding width
+
+- `brad`: Text-box border radius
 
 ```
 top-left      top       top-right
