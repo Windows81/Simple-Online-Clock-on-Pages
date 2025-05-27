@@ -64,6 +64,14 @@
 			return urlParams[prop];
 		}
 
+		// https://stackoverflow.com/a/79641250/6879778 (my own work)
+		var offsetMs = 0;
+		async function calcOffset() {
+			return new Date((await fetch("https://cdn.doubleverify.com/dvbm.js", {cache: "no-store"})).headers.get("date")) - new Date();
+		}
+		setTimeout(async () => offsetMs = await calcOffset());
+
+
 		function fixFormat(format) {
 			switch (format) {
 				case "12":
@@ -80,7 +88,7 @@
 		var body = document.body;
 		var output = document.getElementById("output");
 
-		function updateStyle() {
+		async function updateStyle() {
 			Object.assign(body.style, {
 				background: getProp("bg") ?? "black",
 				...getFlexPositions(getProp("position") ?? "center"),
@@ -103,9 +111,10 @@
 		setInterval(updateStyle, 1000);
 		updateStyle();
 
-		function updateTime() {
+		async function updateTime() {
 			var format = fixFormat(getProp("format"));
-			output.innerText = moment().format(format);
+			var date = new Date().getTime() + offsetMs
+			output.innerText = moment(date).format(format);
 			requestAnimationFrame(updateTime);
 		}
 		requestAnimationFrame(updateTime);
