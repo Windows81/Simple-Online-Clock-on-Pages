@@ -64,18 +64,6 @@
 			return urlParams[prop];
 		}
 
-		// https://stackoverflow.com/a/79641250/6879778 (my own work)
-		var offsetMs = (
-			(getProp("offsetMs") ?? 0) +
-			new Date().getTimezoneOffset()
-		);
-		async function calcOnlineOffset() {
-			return new Date((await fetch("https://cdn.doubleverify.com/dvbm.js", {cache: "no-store"})).headers.get("date")) - new Date();
-		}
-		if (Boolean(getProp("useOnline"))) {
-			setTimeout(async () => offsetMs += await calcOnlineOffset());
-		}
-
 		function fixFormat(format) {
 			switch (format) {
 				case "12":
@@ -88,6 +76,21 @@
 					return format;
 			}
 		}
+
+		// https://stackoverflow.com/a/79641250/6879778 (my own work)
+		var offsetMs = 0;
+		async function setOffset() {
+			offsetMs = getProp("offsetMs") ?? 0;
+			offsetMs += new Date().getTimezoneOffset();
+			if (getProp("useOnline") == "true") {
+				var onlineDate = new Date((await fetch("https://cdn.doubleverify.com/dvbm.js", {cache: "no-store"})).headers.get("date"));
+				offsetMs += onlineDate - new Date();
+			}
+			return offsetMs;
+		}
+		setTimeout(setOffset, 1);
+		setTimeout(setOffset, 100);
+		setTimeout(setOffset, 1000);
 
 		var body = document.body;
 		var output = document.getElementById("output");
