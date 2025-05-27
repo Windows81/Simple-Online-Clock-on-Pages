@@ -65,12 +65,16 @@
 		}
 
 		// https://stackoverflow.com/a/79641250/6879778 (my own work)
-		var offsetMs = 0;
-		async function calcOffset() {
+		var offsetMs = (
+			(getProp("offsetMs") ?? 0) +
+			new Date().getTimezoneOffset()
+		);
+		async function calcOnlineOffset() {
 			return new Date((await fetch("https://cdn.doubleverify.com/dvbm.js", {cache: "no-store"})).headers.get("date")) - new Date();
 		}
-		setTimeout(async () => offsetMs = await calcOffset());
-
+		if (Boolean(getProp("useOnline"))) {
+			setTimeout(async () => offsetMs += await calcOnlineOffset());
+		}
 
 		function fixFormat(format) {
 			switch (format) {

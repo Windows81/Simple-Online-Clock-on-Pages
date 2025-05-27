@@ -38,6 +38,14 @@ bottom-left  bottom  bottom-right
 
 - `format`: _Moment.js_ [format string](https://momentjs.com/docs/?/displaying/format/#/parsing/string-format/)
 
+- `offsetMs`: Number of milliseconds to add to the current UTC.
+
+  - defaults to your local time-zone offset
+
+- `useOnline`: If `true`, extracts the current time from a remote server upon page load.
+
+  - defaults to `false`
+
 ---
 
 Parameters can be passed either in the query string:
